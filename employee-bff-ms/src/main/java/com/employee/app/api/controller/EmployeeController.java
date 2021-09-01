@@ -22,7 +22,7 @@ import com.employee.app.dto.response.EmployeeResponse;
 import com.employee.app.service.IEmployeeService;
 
 @RestController
-@RequestMapping("v1/employees")
+@RequestMapping("v1")
 public class EmployeeController 
 	implements EmployeeAPI 
 {

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2002-2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.employee.app.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -8,20 +24,39 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.employee.app.config.MoneySerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * 
+ * {@code EmployeeForXml} is the employee model for saving as XML.
+ * 
+ * @author Debdyut Hajra
+ *
+ */
 @XmlRootElement(name = "employee")
 @XmlAccessorType (XmlAccessType.FIELD)
 public class EmployeeForXml {
 
+	/**
+	 * {@code Name} of the employee.
+	 */
 	@XmlAttribute(name = "name")
 	private String name = null;
 
+	/**
+	 * {@code DOB} is the date of birth of the employee.
+	 */
 	@XmlAttribute(name = "dob")
 	private String dob = null;
 
+	/**
+	 * {@code Salary} of the employee in INR.
+	 */
 	@XmlAttribute(name = "salary")
 	@JsonSerialize(using = MoneySerializer.class)
 	private Double salary = null;
 
+	/**
+	 * {@code Age} of the employee in years.
+	 */
 	@XmlAttribute(name = "age")
 	private Integer age = null;
 

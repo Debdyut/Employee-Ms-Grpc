@@ -14,34 +14,24 @@
  * limitations under the License.
  */
 
-package com.employee.app.config;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+package com.employee.app.constant;
 
 /**
- * 
- * {@code StorageProperties} retrieves the desired storage location
- * from the properties file.
+ * {@code GenericConstants} defines the constants used in the project.
  * 
  * @author Debdyut Hajra
  *
  */
-@Configuration
-@ConfigurationProperties(prefix = "storage")
-public class StorageProperties {
-
+public class GenericConstants {
+	
 	/**
-	 * {@code Location} where files will be stored.
+	 * {@code CSV_EXTENSION} is the extension for CSV files.
 	 */
-	private String location;
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
+	public static final String CSV_EXTENSION = ".csv";
+	
+	/**
+	 * {@code XML_EXTENSION} is the extension for XML files.
+	 */
+	public static final String XML_EXTENSION = ".xml";
 
 }

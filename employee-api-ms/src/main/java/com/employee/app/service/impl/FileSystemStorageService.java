@@ -1,3 +1,19 @@
+/*
+ * Copyright 2002-2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.employee.app.service.impl;
 
 import java.io.IOException;
@@ -12,7 +28,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -26,16 +41,34 @@ import com.employee.app.exception.FileNotFoundException;
 import com.employee.app.exception.StorageException;
 import com.employee.app.service.IStorageService;
 
+/**
+ * 
+ * {@code FileSystemStorageService} provides the implementations for the
+ * core functionalities of the storage service.
+ * 
+ * @author Debdyut Hajra
+ *
+ */
 @Service
 public class FileSystemStorageService implements IStorageService {
 
+	/**
+	 * {@code RootLocation} is the storage location where the files will be stored.
+	 */
     private final Path rootLocation;
 
-    @Autowired
+    /**
+	 * Autowire the dependencies through constructor injection.
+	 * 
+	 * @param properties
+	 */
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
+    /**
+     * Check if root location can be accessed.
+     */
     @Override
     @PostConstruct
     public void init() {
@@ -46,6 +79,9 @@ public class FileSystemStorageService implements IStorageService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String store(MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
@@ -71,6 +107,9 @@ public class FileSystemStorageService implements IStorageService {
         return filename;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Stream<Path> loadAll() {
         try {
@@ -84,11 +123,17 @@ public class FileSystemStorageService implements IStorageService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Path load(String filename) {
         return rootLocation.resolve(filename);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Resource loadAsResource(String filename) {
         try {
@@ -107,6 +152,9 @@ public class FileSystemStorageService implements IStorageService {
         }
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String readFile(String filename) {
     	Resource resource = loadAsResource(filename);
@@ -119,6 +167,9 @@ public class FileSystemStorageService implements IStorageService {
     	return fileContent;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
