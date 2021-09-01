@@ -1,3 +1,19 @@
+/*
+ * Copyright 2021-2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.employee.app.api;
 
 import javax.validation.Valid;
@@ -22,8 +38,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * {@code EmployeeAPI} defines the exposed endpoints for storing, updating and retrieving files.
+ * 
+ * @author Debdyut Hajra
+ *
+ */
 public interface EmployeeAPI {
 
+	/**
+	 *  {@code Read} method retrieves the desired file.
+	 * 
+	 * @param filename
+	 * @param download
+	 * @return
+	 */
 	@Operation(summary = "Retrieves an uploaded file by file name.", description = "Retrieves an uploaded file by file name.", tags = {
 			"Employee" })
 	@ApiResponses(value = {
@@ -52,6 +81,14 @@ public interface EmployeeAPI {
 			@Parameter(in = ParameterIn.PATH, description = "File Name is the file to be retrieved.", required = true, schema = @Schema()) @PathVariable("filename") String filename,
 			@Parameter(in = ParameterIn.QUERY, description = "Download indicates whether to download the file.", schema = @Schema(defaultValue = "false")) @Valid @RequestParam(value = "download", required = false, defaultValue = "false") Boolean download);
 
+	/**
+	 * {@code Store} method stores a file in CSV and XML formats.
+	 * 
+	 * @param fileType
+	 * @param body
+	 * @param fileName
+	 * @return
+	 */
 	@Operation(summary = "Stores employee information in CSV/XML format.", description = "Stores employee information in CSV/XML format.", tags = {
 			"Employee" })
 	@ApiResponses(value = {
@@ -82,6 +119,14 @@ public interface EmployeeAPI {
 			@Parameter(in = ParameterIn.DEFAULT, description = "The list of employee information to be stored in desired format.", required = true, schema = @Schema()) @Valid @RequestBody EmployeeRequest body,
 			@Parameter(in = ParameterIn.HEADER, description = "File Name is the preferred name of the file to be stored. If file name is not provided, then a UUID is set as the default file name.", schema = @Schema()) @RequestHeader(value = "fileName", required = false) String fileName);
 
+	/**
+	 * {@code Update} method updates an existing file.
+	 * 
+	 * @param fileType
+	 * @param fileName
+	 * @param body
+	 * @return
+	 */
 	@Operation(summary = "Update employee information in specified file.", description = "Update employee information in specified file.", tags = {
 			"Employee" })
 	@ApiResponses(value = {
