@@ -73,7 +73,7 @@ public class EmployeeController
 		var response = employeeService.store(fileType, body, fileName);
 
 		// Return reponse
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	/**
