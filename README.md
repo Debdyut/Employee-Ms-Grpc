@@ -25,17 +25,16 @@
 
 ### 1. Get the Source Code
 ```
- https://github.com/Debdyut/Employee-Ms-Grpc.git
- cd Employee-Ms-Grpc
+git clone https://github.com/Debdyut/Employee-Ms-Grpc.git
+cd Employee-Ms-Grpc
 ```
 ### 2. Run service 2
 ```
 cd employee-api-ms
 ./mvnw spring-boot:run
 ```
-### 3. Run service 1
+### 3. Run service 1 from a new terminal
 ```
-cd ..
 cd employee-bff-ms
 ./mvnw spring-boot:run
 ```

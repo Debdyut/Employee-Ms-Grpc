@@ -48,6 +48,8 @@ import org.springframework.web.context.request.WebRequest;
 import com.employee.app.dto.Error;
 import com.employee.app.dto.MoreInfo;
 
+import io.grpc.StatusRuntimeException;
+
 /**
  * 
  * {@code EmployeeExceptionHandler} builds and returns error response to users.
@@ -142,6 +144,23 @@ public class EmployeeExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 	}
 
+	@ExceptionHandler(StatusRuntimeException.class)
+	public ResponseEntity<Error> handleException(StatusRuntimeException ex) {
+		log.error("Exception {}", ex.getMessage(), ex);
+		errorResponse = new Error();
+		if (com.google.rpc.Code.NOT_FOUND_VALUE == ex.getStatus().getCode().value()) {
+			errorResponse.setCode(HTTP_BAD_REQUEST_ERROR_CODE);
+			errorResponse.setMessage(HTTP_BAD_REQUEST_ERROR_MSG);
+		} else {
+			errorResponse.setCode(HTTP_INTERNAL_SERVER_ERROR_CODE);
+			errorResponse.setMessage(HTTP_INTERNAL_SERVER_ERROR_MSG);
+		}		
+		errorResponse.setDeveloperMessage(ex.getMessage());
+		List<MoreInfo> moreInfoList = prepareMoreInfoResp();
+		errorResponse.setMoreInfo(moreInfoList);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Error> handleException(Exception ex) {
 		log.error("Exception {}", ex.getMessage(), ex);

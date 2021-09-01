@@ -36,6 +36,7 @@ build/
 ### Generated ###
 /generated/
 /grpc-api/
+/sandbox/
 
 # Compiled class file
 *.class

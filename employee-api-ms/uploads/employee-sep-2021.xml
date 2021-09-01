@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<employees>
-    <employee name="MS Dhoni" dob="20-8-1950" salary="1.221112415E8" age="56"/>
-    <employee name="Saurav Ganguly" dob="9-6-1986" salary="1.000112415E8" age="40"/>
-    <employee name="Virender Sehwag" dob="20-8-1950" salary="1.221112415E8" age="56"/>
-</employees>

@@ -27,7 +27,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.employee.app.exception.ExceptionUtils;
 import com.employee.app.exception.FileNotFoundException;
+import com.employee.app.exception.StorageException;
 import com.employee.app.grpc.EmployeeRequest;
 import com.employee.app.grpc.EmployeeRequest.FileFormat;
 import com.employee.app.grpc.EmployeeServiceGrpc.EmployeeServiceImplBase;
@@ -81,37 +83,46 @@ public class EmployeeService extends EmployeeServiceImplBase {
 	@Override
 	public void create(EmployeeRequest req, StreamObserver<EmployeeRequest.Response> resObserver) {
 
-		// Transform request to employee business model
-		EmployeeModel[] employeeArr = employeeMapper.protoToModel(req.getEmployeeList()).toArray(EmployeeModel[]::new);
-
-		// Retrieve file name from request.
-		// If file name is not available, set a random UUID as file name.
-		String fileName = null;
-		if (!StringUtils.isEmpty(req.getName())) {
-			fileName = req.getName();
+		try {
+			// Transform request to employee business model
+			EmployeeModel[] employeeArr = employeeMapper.protoToModel(req.getEmployeeList()).toArray(EmployeeModel[]::new);
+	
+			// Retrieve file name from request.
+			// If file name is not available, set a random UUID as file name.
+			String fileName = null;
+			if (!StringUtils.isEmpty(req.getName())) {
+				fileName = req.getName();
+			}
+			else {
+				fileName = UUID.randomUUID().toString();
+			}
+	
+			// Store the file in desired file format
+			File file = null;
+			if (FileFormat.CSV.equals(req.getFileType())) {
+				file = csvHelper.store(fileName, employeeArr);
+			} else if (FileFormat.XML.equals(req.getFileType())) {
+				file = xmlHelper.store(fileName, employeeArr);
+			}
+	
+			// Throw error if file already exists
+			if (file.exists()) {
+				throw new StorageException("File already exists: " + fileName);				
+			}
+			
+			// Build response
+			EmployeeRequest.Response resp = EmployeeRequest.Response.newBuilder()
+					.setName(fileName)
+					.setType(req.getFileType().name())
+					.setSize(Long.toString(file.length()))
+					.setRecordsNum(Integer.toString(req.getEmployeeList().size()))
+					.build();
+			
+			resObserver.onNext(resp);
+			resObserver.onCompleted();
+		} catch (Exception e) {
+			ExceptionUtils.observeError(resObserver, e, EmployeeRequest.Response.getDefaultInstance());
 		}
-		else {
-			fileName = UUID.randomUUID().toString();
-		}
-
-		// Store the file in desired file format
-		File file = null;
-		if (FileFormat.CSV.equals(req.getFileType())) {
-			file = csvHelper.store(fileName, employeeArr);
-		} else if (FileFormat.XML.equals(req.getFileType())) {
-			file = xmlHelper.store(fileName, employeeArr);
-		}
-
-		// Build response
-		EmployeeRequest.Response resp = EmployeeRequest.Response.newBuilder()
-				.setName(fileName)
-				.setType(req.getFileType().name())
-				.setSize(Long.toString(file.length()))
-				.setRecordsNum(Integer.toString(req.getEmployeeList().size()))
-				.build();
-		
-		resObserver.onNext(resp);
-		resObserver.onCompleted();
 	}
 	
 	/**
@@ -120,41 +131,45 @@ public class EmployeeService extends EmployeeServiceImplBase {
 	@Override
 	public void update(EmployeeRequest req, StreamObserver<EmployeeRequest.Response> resObserver) {
 
-		// Transform request to employee business model
-		EmployeeModel[] employeeArr = employeeMapper.protoToModel(req.getEmployeeList()).toArray(EmployeeModel[]::new);
-
-		// Retrieve file name from request
-		String fileName = req.getName();
-		if (!fileName.endsWith(CSV_EXTENSION) || !fileName.endsWith(XML_EXTENSION)) {
-			fileName += "." + req.getFileType().name().toLowerCase();
+		try {
+			// Transform request to employee business model
+			EmployeeModel[] employeeArr = employeeMapper.protoToModel(req.getEmployeeList()).toArray(EmployeeModel[]::new);
+	
+			// Retrieve file name from request
+			String fileName = req.getName();
+			if (!fileName.endsWith(CSV_EXTENSION) || !fileName.endsWith(XML_EXTENSION)) {
+				fileName += "." + req.getFileType().name().toLowerCase();
+			}
+			
+			// Retrieve path using file name
+			var path = storageService.load(fileName);
+			
+			// Throw error if file not found
+			if (!path.toFile().exists()) {
+				throw new FileNotFoundException("File not found: " + fileName);				
+			}
+			
+			// Update file content
+			File file = null;
+			if (FileFormat.CSV.equals(req.getFileType())) {
+				file = csvHelper.store(fileName, employeeArr);
+			} else if (FileFormat.XML.equals(req.getFileType())) {
+				file = xmlHelper.store(fileName, employeeArr);
+			}
+	
+			// Build response
+			EmployeeRequest.Response resp = EmployeeRequest.Response.newBuilder()
+					.setName(fileName)
+					.setType(req.getFileType().name())
+					.setSize(Long.toString(file.length()))
+					.setRecordsNum(Integer.toString(req.getEmployeeList().size()))
+					.build();
+			
+			resObserver.onNext(resp);
+			resObserver.onCompleted();
+		} catch (Exception e) {
+			ExceptionUtils.observeError(resObserver, e, EmployeeRequest.Response.getDefaultInstance());
 		}
-		
-		// Retrieve path using file name
-		var path = storageService.load(fileName);
-		
-		// Throw error if file not found
-		if (ObjectUtils.isEmpty(path)) {
-			throw new FileNotFoundException("File not found: " + fileName);
-		}
-		
-		// Update file content
-		File file = null;
-		if (FileFormat.CSV.equals(req.getFileType())) {
-			file = csvHelper.store(fileName, employeeArr);
-		} else if (FileFormat.XML.equals(req.getFileType())) {
-			file = xmlHelper.store(fileName, employeeArr);
-		}
-
-		// Build response
-		EmployeeRequest.Response resp = EmployeeRequest.Response.newBuilder()
-				.setName(fileName)
-				.setType(req.getFileType().name())
-				.setSize(Long.toString(file.length()))
-				.setRecordsNum(Integer.toString(req.getEmployeeList().size()))
-				.build();
-		
-		resObserver.onNext(resp);
-		resObserver.onCompleted();
 	}
 
 }

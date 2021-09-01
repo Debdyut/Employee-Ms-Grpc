@@ -61,6 +61,16 @@ public class ExceptionUtils {
 				LOG.info(errorMessage + "{}", e.getMessage());
 				status = com.google.rpc.Status.newBuilder().setCode(com.google.rpc.Code.UNAVAILABLE_VALUE)
 						.setMessage(errorMessage + cause.getMessage()).addDetails(Any.pack(defaultInstance)).build();
+			} else if (cause instanceof FileNotFoundException) {
+				String errorMessage = "File not found exception";
+				LOG.info(errorMessage + "{}", e.getMessage());
+				status = com.google.rpc.Status.newBuilder().setCode(com.google.rpc.Code.NOT_FOUND_VALUE)
+						.setMessage(errorMessage + cause.getMessage()).addDetails(Any.pack(defaultInstance)).build();
+			} else if (cause instanceof StorageException) {
+				String errorMessage = "Storage exception";
+				LOG.info(errorMessage + "{}", e.getMessage());
+				status = com.google.rpc.Status.newBuilder().setCode(com.google.rpc.Code.INVALID_ARGUMENT_VALUE)
+						.setMessage(errorMessage + cause.getMessage()).addDetails(Any.pack(defaultInstance)).build();
 			} else {
 				status = com.google.rpc.Status.newBuilder().setCode(com.google.rpc.Code.INTERNAL_VALUE)
 						.setMessage("Internal server error").addDetails(Any.pack(defaultInstance)).build();
