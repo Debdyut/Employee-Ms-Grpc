@@ -116,6 +116,76 @@ public class EmployeeCsvHelper {
                             + fileName);
     	}
     	
+    	// Throw error if file already exists
+		if (file.exists()) {
+			throw new StorageException("File already exists: " + fileName);				
+		}
+    	
+    	// Write the employee records to the desired file location
+    	try {
+    		CsvMapper csvMapper = new CsvMapper();
+    		CsvSchema csvSchema = csvMapper
+    								.schemaFor(EmployeeForCsv.class)
+    								.withHeader();
+
+    		csvMapper.addMixIn(EmployeeModel.class, EmployeeForCsv.class);
+    		
+    		csvMapper.writerFor(EmployeeModel[].class)
+	    			 .with(csvSchema)
+	    			 .writeValue(file, employees);
+    		
+    	} catch (JsonMappingException | JsonGenerationException e) {
+    		throw new StorageException(
+                    "Unable to parse data to csv for "
+                            + fileName, e);
+		} catch (IOException e) {
+			throw new StorageException("Failed to store file " + fileName, e);
+		}
+    	
+    	// Return the saved file
+    	return file;
+	}
+    
+    /**
+     * 
+     * {@code Update} method helps to update employee records in the CSV file
+     * in storage location.
+     * 
+     * @param fileName
+     * @param employees
+     * @return {@code java.io.File}
+     */
+    public File update (String fileName, EmployeeModel[] employees) {
+    	// Check if file name is null or empty
+    	if (StringUtils.isBlank(fileName)) {
+    		throw new StorageException("Failed to store file with empty file name");
+    	}
+    	
+    	// Check if employee records is empty
+    	if (ArrayUtils.isEmpty(employees)) {
+    		throw new StorageException("Failed to store empty file " + fileName);
+    	}
+    	
+    	// Check for illegal file names
+    	if (fileName.contains("..")) {
+            // This is a security check
+            throw new StorageException(
+                    "Cannot store file with relative path outside current directory "
+                            + fileName);
+        }
+    	
+    	// Create a new file object at the storage location
+    	File file = null;
+    	try {
+    		if (!fileName.endsWith(CSV_EXTENSION))
+    			fileName += CSV_EXTENSION;
+    		file = this.rootLocation.resolve(fileName).toFile();
+    	} catch (UnsupportedOperationException e) {
+    		throw new StorageException(
+                    "Cannot store file with relative path: "
+                            + fileName);
+    	}
+    	
     	// Write the employee records to the desired file location
     	try {
     		CsvMapper csvMapper = new CsvMapper();

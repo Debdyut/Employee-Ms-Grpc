@@ -126,6 +126,78 @@ public class EmployeeXmlHelper {
                             + fileName);
     	}
     	
+    	// Throw error if file already exists
+		if (file.exists()) {
+			throw new StorageException("File already exists: " + fileName);				
+		}
+    	
+    	// Convert employee model to jaxb models for saving to XML file.
+    	var employeeList = employeeMapper.modelToJaxbModel(employees);
+    	
+    	// Write the employee records to the desired file location
+		try {
+			// Create JAXB Context
+			JAXBContext jaxbContext = JAXBContext.newInstance(EmployeeListForXml.class);
+
+			// Create Marshaller
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+			// Required formatting
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+			// Writes XML file to file-system
+			jaxbMarshaller.marshal(employeeList, file);
+			
+		} catch (JAXBException e) {
+			throw new StorageException(
+                    "Unable to save XML to "
+                            + fileName, e);
+		}
+
+		// Return the saved file
+		return file;
+	}
+	
+	/**
+     * 
+     * {@code Update} method helps to update employee records in the XML file
+     * in storage location.
+     * 
+     * @param fileName
+     * @param employees
+     * @return {@code java.io.File}
+     */
+	public File update(String fileName, EmployeeModel[] employees) {
+		// Check if file name is null or empty
+		if (StringUtils.isBlank(fileName)) {
+    		throw new StorageException("Failed to store file with empty file name");
+    	}
+		
+		// Check if employee records is empty
+    	if (ArrayUtils.isEmpty(employees)) {
+    		throw new StorageException("Failed to store empty file " + fileName);
+    	}
+    	
+    	// Check for illegal file names
+    	if (fileName.contains("..")) {
+            // This is a security check
+            throw new StorageException(
+                    "Cannot store file with relative path outside current directory "
+                            + fileName);
+        }
+    	
+    	// Create a new file object at the storage location
+    	File file = null;
+    	try {
+    		if (!fileName.endsWith(XML_EXTENSION))
+    			fileName += XML_EXTENSION;
+    		file = this.rootLocation.resolve(fileName).toFile();
+    	} catch (UnsupportedOperationException e) {
+    		throw new StorageException(
+                    "Cannot store file with relative path: "
+                            + fileName);
+    	}
+    	
     	// Convert employee model to jaxb models for saving to XML file.
     	var employeeList = employeeMapper.modelToJaxbModel(employees);
     	

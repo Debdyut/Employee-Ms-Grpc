@@ -141,24 +141,27 @@ public class EmployeeExceptionHandler {
 		MoreInfo moreInfo = new MoreInfo();
 		moreInfoList.add(moreInfo);
 		errorResponse.setMoreInfo(moreInfoList);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
 
 	@ExceptionHandler(StatusRuntimeException.class)
 	public ResponseEntity<Error> handleException(StatusRuntimeException ex) {
 		log.error("Exception {}", ex.getMessage(), ex);
 		errorResponse = new Error();
+		HttpStatus httpStatus = null;
 		if (com.google.rpc.Code.NOT_FOUND_VALUE == ex.getStatus().getCode().value()) {
 			errorResponse.setCode(HTTP_BAD_REQUEST_ERROR_CODE);
 			errorResponse.setMessage(HTTP_BAD_REQUEST_ERROR_MSG);
+			httpStatus = HttpStatus.BAD_REQUEST;
 		} else {
 			errorResponse.setCode(HTTP_INTERNAL_SERVER_ERROR_CODE);
 			errorResponse.setMessage(HTTP_INTERNAL_SERVER_ERROR_MSG);
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}		
 		errorResponse.setDeveloperMessage(ex.getMessage());
 		List<MoreInfo> moreInfoList = prepareMoreInfoResp();
 		errorResponse.setMoreInfo(moreInfoList);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		return ResponseEntity.status(httpStatus).body(errorResponse);
 	}
 	
 	@ExceptionHandler(Exception.class)

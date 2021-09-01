@@ -103,12 +103,7 @@ public class EmployeeService extends EmployeeServiceImplBase {
 				file = csvHelper.store(fileName, employeeArr);
 			} else if (FileFormat.XML.equals(req.getFileType())) {
 				file = xmlHelper.store(fileName, employeeArr);
-			}
-	
-			// Throw error if file already exists
-			if (file.exists()) {
-				throw new StorageException("File already exists: " + fileName);				
-			}
+			}			
 			
 			// Build response
 			EmployeeRequest.Response resp = EmployeeRequest.Response.newBuilder()
@@ -152,9 +147,9 @@ public class EmployeeService extends EmployeeServiceImplBase {
 			// Update file content
 			File file = null;
 			if (FileFormat.CSV.equals(req.getFileType())) {
-				file = csvHelper.store(fileName, employeeArr);
+				file = csvHelper.update(fileName, employeeArr);
 			} else if (FileFormat.XML.equals(req.getFileType())) {
-				file = xmlHelper.store(fileName, employeeArr);
+				file = xmlHelper.update(fileName, employeeArr);
 			}
 	
 			// Build response

@@ -57,17 +57,17 @@ public class ExceptionUtils {
 				cause = cause.getCause();
 			}
 			if (cause instanceof SocketException) {
-				String errorMessage = "Socket exception";
+				String errorMessage = "Socket exception: ";
 				LOG.info(errorMessage + "{}", e.getMessage());
 				status = com.google.rpc.Status.newBuilder().setCode(com.google.rpc.Code.UNAVAILABLE_VALUE)
 						.setMessage(errorMessage + cause.getMessage()).addDetails(Any.pack(defaultInstance)).build();
 			} else if (cause instanceof FileNotFoundException) {
-				String errorMessage = "File not found exception";
+				String errorMessage = "File not found exception: ";
 				LOG.info(errorMessage + "{}", e.getMessage());
 				status = com.google.rpc.Status.newBuilder().setCode(com.google.rpc.Code.NOT_FOUND_VALUE)
 						.setMessage(errorMessage + cause.getMessage()).addDetails(Any.pack(defaultInstance)).build();
 			} else if (cause instanceof StorageException) {
-				String errorMessage = "Storage exception";
+				String errorMessage = "Storage exception: ";
 				LOG.info(errorMessage + "{}", e.getMessage());
 				status = com.google.rpc.Status.newBuilder().setCode(com.google.rpc.Code.INVALID_ARGUMENT_VALUE)
 						.setMessage(errorMessage + cause.getMessage()).addDetails(Any.pack(defaultInstance)).build();
