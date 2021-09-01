@@ -1,0 +1,788 @@
+{
+	"info": {
+		"_postman_id": "3dc871bc-4d1b-4635-a9cd-50a4a6637579",
+		"name": "Employee-MS-Grpc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Store file",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "fileType",
+						"value": "CSV",
+						"type": "text"
+					},
+					{
+						"key": "fileName",
+						"value": "employee-sep-2022",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"Sachin Tendulkar\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/employeeManagement/v1/employees",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"employeeManagement",
+						"v1",
+						"employees"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success - XML",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fileType",
+								"value": "XML",
+								"type": "text"
+							},
+							{
+								"key": "fileName",
+								"value": "employee-sep-2021",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"Sachin Tendulkar\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees"
+							]
+						}
+					},
+					"status": "201Created",
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 04:43:11 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"fileName\": \"employee-sep-2021\",\n    \"fileSize\": 254,\n    \"fileType\": \"XML\",\n    \"recordsNum\": 2\n}"
+				},
+				{
+					"name": "Error: Bad input",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fileType",
+								"value": "XML",
+								"type": "text"
+							},
+							{
+								"key": "fileName",
+								"value": "employee-sep-2021",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"Sachin Tendulkar\",\r\n      \"dob\": \"abc\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 12:01:09 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"400\",\n    \"message\": \"Bad Request\",\n    \"developerMessage\": \"Validation failed for argument [1] in public org.springframework.http.ResponseEntity<?> com.employee.app.api.controller.EmployeeController.store(java.lang.String,com.employee.app.dto.request.EmployeeRequest,java.lang.String): [Field error in object 'employeeRequest' on field 'employees[0].dob': rejected value [abc]; codes [Pattern.employeeRequest.employees[0].dob,Pattern.employeeRequest.employees.dob,Pattern.employees[0].dob,Pattern.employees.dob,Pattern.dob,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [employeeRequest.employees[0].dob,employees[0].dob]; arguments []; default message [employees[0].dob],[Ljavax.validation.constraints.Pattern$Flag;@3a0ffc99,^\\\\d{1,2}-\\\\d{1,2}-\\\\d{4}$]; default message [must match \\\"^\\\\d{1,2}-\\\\d{1,2}-\\\\d{4}$\\\"]] \",\n    \"moreInfo\": [\n        {\n            \"errorCode\": null,\n            \"propertyField\": \"employees[0].dob\",\n            \"message\": \"must match \\\"^\\\\d{1,2}-\\\\d{1,2}-\\\\d{4}$\\\"\",\n            \"errorType\": null\n        }\n    ]\n}"
+				},
+				{
+					"name": "Error: File already exists",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fileType",
+								"value": "XML",
+								"type": "text"
+							},
+							{
+								"key": "fileName",
+								"value": "employee-oct-2021",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"Sachin Tendulkar\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 11:59:48 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"500\",\n    \"message\": \"Internal Server Error\",\n    \"developerMessage\": \"INVALID_ARGUMENT: Storage exception: File already exists: employee-oct-2021.xml\",\n    \"moreInfo\": [\n        {\n            \"errorCode\": null,\n            \"propertyField\": null,\n            \"message\": \"Refer Swagger specification URL for more details:/employeeManagement/swagger-ui.html#/\",\n            \"errorType\": null\n        }\n    ]\n}"
+				},
+				{
+					"name": "Success - CSV",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fileType",
+								"value": "CSV",
+								"type": "text"
+							},
+							{
+								"key": "fileName",
+								"value": "employee-sep-2021",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"Sachin Tendulkar\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees"
+							]
+						}
+					},
+					"status": "201Created",
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 04:41:47 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"fileName\": \"employee-sep-2021\",\n    \"fileSize\": 110,\n    \"fileType\": \"CSV\",\n    \"recordsNum\": 2\n}"
+				}
+			]
+		},
+		{
+			"name": "Update file",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "fileType",
+						"value": "CSV",
+						"type": "text"
+					},
+					{
+						"key": "fileName",
+						"value": "employee-sep-2021",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"MS Dhoni\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    },\r\n    {\r\n      \"name\": \"Virender Sehwag\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/employeeManagement/v1/employees",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"employeeManagement",
+						"v1",
+						"employees"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Error: Bad input",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "fileType",
+								"value": "CSV",
+								"type": "text"
+							},
+							{
+								"key": "fileName",
+								"value": "employee-feb-2024",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"MS Dhoni\",\r\n      \"dob\": \"a\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    },\r\n    {\r\n      \"name\": \"Virender Sehwag\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 12:05:40 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"400\",\n    \"message\": \"Bad Request\",\n    \"developerMessage\": \"Validation failed for argument [2] in public org.springframework.http.ResponseEntity<com.employee.app.dto.response.EmployeeResponse> com.employee.app.api.controller.EmployeeController.update(java.lang.String,java.lang.String,com.employee.app.dto.request.EmployeeRequest): [Field error in object 'employeeRequest' on field 'employees[0].dob': rejected value [a]; codes [Pattern.employeeRequest.employees[0].dob,Pattern.employeeRequest.employees.dob,Pattern.employees[0].dob,Pattern.employees.dob,Pattern.dob,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [employeeRequest.employees[0].dob,employees[0].dob]; arguments []; default message [employees[0].dob],[Ljavax.validation.constraints.Pattern$Flag;@417a2d95,^\\\\d{1,2}-\\\\d{1,2}-\\\\d{4}$]; default message [must match \\\"^\\\\d{1,2}-\\\\d{1,2}-\\\\d{4}$\\\"]] \",\n    \"moreInfo\": [\n        {\n            \"errorCode\": null,\n            \"propertyField\": \"employees[0].dob\",\n            \"message\": \"must match \\\"^\\\\d{1,2}-\\\\d{1,2}-\\\\d{4}$\\\"\",\n            \"errorType\": null\n        }\n    ]\n}"
+				},
+				{
+					"name": "Error: File not found",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "fileType",
+								"value": "CSV",
+								"type": "text"
+							},
+							{
+								"key": "fileName",
+								"value": "employee-feb-2024",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"MS Dhoni\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    },\r\n    {\r\n      \"name\": \"Virender Sehwag\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 12:04:41 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"400\",\n    \"message\": \"Bad Request\",\n    \"developerMessage\": \"NOT_FOUND: File not found exception: File not found: employee-feb-2024.csv\",\n    \"moreInfo\": [\n        {\n            \"errorCode\": null,\n            \"propertyField\": null,\n            \"message\": \"Refer Swagger specification URL for more details:/employeeManagement/swagger-ui.html#/\",\n            \"errorType\": null\n        }\n    ]\n}"
+				},
+				{
+					"name": "Success - CSV",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "fileType",
+								"value": "CSV",
+								"type": "text"
+							},
+							{
+								"key": "fileName",
+								"value": "employee-sep-2021",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"MS Dhoni\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    },\r\n    {\r\n      \"name\": \"Virender Sehwag\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 04:44:12 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"fileName\": \"employee-sep-2021.csv\",\n    \"fileSize\": 147,\n    \"fileType\": \"CSV\",\n    \"recordsNum\": 3\n}"
+				},
+				{
+					"name": "Success - XML",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "fileType",
+								"value": "XML",
+								"type": "text"
+							},
+							{
+								"key": "fileName",
+								"value": "employee-sep-2021",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"employees\": [\r\n    {\r\n      \"name\": \"MS Dhoni\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    },\r\n    {\r\n      \"name\": \"Saurav Ganguly\",\r\n      \"dob\": \"9-6-1986\",\r\n      \"salary\": 100011241.5,\r\n      \"age\": 40\r\n    },\r\n    {\r\n      \"name\": \"Virender Sehwag\",\r\n      \"dob\": \"20-08-1950\",\r\n      \"salary\": 122111241.5,\r\n      \"age\": 56\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 04:44:48 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"fileName\": \"employee-sep-2021.xml\",\n    \"fileSize\": 333,\n    \"fileType\": \"XML\",\n    \"recordsNum\": 3\n}"
+				}
+			]
+		},
+		{
+			"name": "Retrieve data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/employeeManagement/v1/employees/employee-sep-2021.csv?download=false",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"employeeManagement",
+						"v1",
+						"employees",
+						"employee-sep-2021.csv"
+					],
+					"query": [
+						{
+							"key": "download",
+							"value": "false",
+							"description": "Optional. Indicates whether to download the file. Values: true/false"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success - XML",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees/employee-sep-2021.xml?download=false",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees",
+								"employee-sep-2021.xml"
+							],
+							"query": [
+								{
+									"key": "download",
+									"value": "false",
+									"description": "Optional. Indicates whether to download the file. Values: true/false"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/csv;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "333"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 04:46:57 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<employees>\n    <employee name=\"MS Dhoni\" dob=\"20-8-1950\" salary=\"1.221112415E8\" age=\"56\"/>\n    <employee name=\"Saurav Ganguly\" dob=\"9-6-1986\" salary=\"1.000112415E8\" age=\"40\"/>\n    <employee name=\"Virender Sehwag\" dob=\"20-8-1950\" salary=\"1.221112415E8\" age=\"56\"/>\n</employees>\n"
+				},
+				{
+					"name": "Success - CSV",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees/employee-sep-2021.csv?download=false",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees",
+								"employee-sep-2021.csv"
+							],
+							"query": [
+								{
+									"key": "download",
+									"value": "false",
+									"description": "Optional. Indicates whether to download the file. Values: true/false"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/csv;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "147"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 04:46:23 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "name,dob,salary,age\n\"MS Dhoni\",20-08-1950,122111241.50,56\n\"Saurav Ganguly\",09-06-1986,100011241.50,40\n\"Virender Sehwag\",20-08-1950,122111241.50,56\n"
+				},
+				{
+					"name": "Error: File not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/employeeManagement/v1/employees/employee-sep-2031.csv?download=false",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"employeeManagement",
+								"v1",
+								"employees",
+								"employee-sep-2031.csv"
+							],
+							"query": [
+								{
+									"key": "download",
+									"value": "false",
+									"description": "Optional. Indicates whether to download the file. Values: true/false"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 01 Sep 2021 12:18:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"400\",\n    \"message\": \"Bad Request\",\n    \"developerMessage\": \"org.springframework.web.reactive.function.client.WebClientResponseException$NotFound: 404 Not Found from GET http://localhost:9090/download/employee-sep-2031.csv\",\n    \"moreInfo\": [\n        {\n            \"errorCode\": null,\n            \"propertyField\": null,\n            \"message\": null,\n            \"errorType\": null\n        }\n    ]\n}"
+				}
+			]
+		}
+	]
+}
