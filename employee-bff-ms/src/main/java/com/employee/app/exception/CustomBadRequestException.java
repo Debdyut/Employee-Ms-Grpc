@@ -1,5 +1,7 @@
 package com.employee.app.exception;
 
+import reactor.core.publisher.Mono;
+
 /**
  * 
  * {@code CustomBadRequestException} wraps exceptions related to
@@ -15,9 +17,18 @@ public class CustomBadRequestException extends Exception {
 	public CustomBadRequestException(String message) {
         super(message);
     }
+	
+	public CustomBadRequestException(Throwable cause) {
+        super(cause);
+    }
 
     public CustomBadRequestException(String message, Throwable cause) {
         super(message, cause);
+    }
+    
+    public static Mono<CustomBadRequestException> createException(Throwable cause) {
+    	CustomBadRequestException ex = new CustomBadRequestException(cause);
+    	return Mono.just(ex);
     }
 	
 }

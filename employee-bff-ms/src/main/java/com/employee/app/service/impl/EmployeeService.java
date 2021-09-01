@@ -25,11 +25,13 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.employee.app.client.GrpcClient;
 import com.employee.app.dto.request.EmployeeRequest;
 import com.employee.app.dto.response.EmployeeResponse;
+import com.employee.app.exception.CustomBadRequestException;
 import com.employee.app.grpc.EmployeeRequest.FileFormat;
 import com.employee.app.mapper.EmployeeMapper;
 import com.employee.app.service.IEmployeeService;
@@ -163,7 +165,9 @@ public class EmployeeService implements IEmployeeService {
 		String fileContent = client.get().uri("/download/" + fileName)
 								.retrieve()
 								.onStatus(HttpStatus::is4xxClientError,
-										error -> Mono.error(new RuntimeException("Bad Request")))
+										error -> error.createException()
+													  .flatMap(CustomBadRequestException::createException)
+													  .flatMap(Mono::error))
 								.onStatus(HttpStatus::is5xxServerError,
 										error -> Mono.error(new RuntimeException("Server is not responding")))
 								.bodyToMono(String.class)

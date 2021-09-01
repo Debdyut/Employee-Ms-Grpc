@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -30,6 +31,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.employee.app.dto.Error;
 import com.employee.app.dto.MoreInfo;
+
+import reactor.core.Exceptions;
 
 @RestControllerAdvice
 public class EmployeeExceptionHandler {
@@ -105,18 +108,6 @@ public class EmployeeExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Error> handleException(Exception ex) {
-		log.error("Exception {}", ex.getMessage(), ex);
-		errorResponse = new Error();
-		errorResponse.setCode(HTTP_INTERNAL_SERVER_ERROR_CODE);
-		errorResponse.setMessage(HTTP_INTERNAL_SERVER_ERROR_MSG);
-		errorResponse.setDeveloperMessage("Internal server error occurred: ");
-		List<MoreInfo> moreInfoList = prepareMoreInfoResp();
-		errorResponse.setMoreInfo(moreInfoList);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-	}
-
 	@ExceptionHandler(CustomBadRequestException.class)
 	public ResponseEntity<Error> handleException(CustomBadRequestException ex) {
 		errorResponse = new Error();
@@ -126,6 +117,21 @@ public class EmployeeExceptionHandler {
 		List<MoreInfo> moreInfoList = new ArrayList<>();
 		MoreInfo moreInfo = new MoreInfo();
 		moreInfoList.add(moreInfo);
+		errorResponse.setMoreInfo(moreInfoList);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+	}
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Error> handleException(Exception ex) {
+		log.error("Exception {}", ex.getMessage(), ex);
+		if ((!ObjectUtils.isEmpty(ex.getCause())) && (ex.getCause() instanceof CustomBadRequestException)) {
+			return handleException(new CustomBadRequestException(ex.getCause().getCause()));
+		}
+		errorResponse = new Error();
+		errorResponse.setCode(HTTP_INTERNAL_SERVER_ERROR_CODE);
+		errorResponse.setMessage(HTTP_INTERNAL_SERVER_ERROR_MSG);
+		errorResponse.setDeveloperMessage(ex.getMessage());
+		List<MoreInfo> moreInfoList = prepareMoreInfoResp();
 		errorResponse.setMoreInfo(moreInfoList);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 	}
