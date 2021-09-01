@@ -1,0 +1,386 @@
+openapi: 3.0.1
+info:
+  title: Employee BFF
+  description: This API provides the capability to store/update/retrieve employee info in CSV/XML format.
+  contact:
+    email: connect2debdyut@gmail.com
+  version: 0.0.1-SNAPSHOT
+  x-api-type:
+  - experience
+servers:
+- url: https://localhost:8080/employeeManagement/v2/
+paths:
+  /employees:
+    post:
+      tags:
+      - Employee
+      summary: Stores employee information in CSV/XML format. 
+      description: Stores employee information in CSV/XML format.
+      operationId: storeEmployee
+      parameters:
+      - name: fileType
+        in: header
+        description: File Type is the format in which file should be saved.
+        required: true
+        schema:
+          type: string
+          enum:
+          - CSV
+          - XML
+          description: >
+            File formats:
+              * `CSV` - Comma-separated values
+              * `XML` - Extensible Markup Language
+      - name: fileName
+        in: header
+        description: File Name is the preferred name of the file to be stored. If file name is not provided, then a UUID is set as the default file name.
+        required: false
+        schema:
+          type: string
+      requestBody:
+        description: The list of employee information to be stored in desired format.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/employeeRequest'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/employeeResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        502:
+          description: Bad Gateway.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        503:
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        504:
+          description: Gateway Timeout.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-codegen-request-body-name: employeeList
+    put:
+      tags:
+      - Employee
+      summary: Update employee information in specified file.
+      description: Update employee information in specified file.
+      operationId: updateEmployees
+      parameters:
+      - name: fileType
+        in: header
+        description: File Type is the format in which file should be saved.
+        required: true
+        schema:
+          type: string
+          enum:
+          - CSV
+          - XML
+          description: >
+            File formats:
+              * `CSV` - Comma-separated values
+              * `XML` - Extensible Markup Language
+      - name: fileName
+        in: header
+        description: File Name is the preferred name of the file to be stored.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The list of employee information to be stored in desired format.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/employeeRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/employeeResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        502:
+          description: Bad Gateway.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        503:
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        504:
+          description: Gateway Timeout.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-codegen-request-body-name: employeeList
+  /employees/{filename}:
+    get:
+      tags:
+      - Employee
+      summary: Retrieves an uploaded file by file name.
+      description: Retrieves an uploaded file by file name.
+      operationId: retrieveFile
+      parameters:
+      - name: filename
+        in: path
+        description: File Name is the file to be retrieved.
+        required: true
+        schema:
+          type: string
+          example: "employee-records-may-21.csv"
+      - in: query
+        name: download
+        schema:
+          type: boolean
+          default: false
+        description: Download indicates whether to download the file.
+      responses:
+        200:
+          description: OK
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+            application/xml:
+              schema:
+                type: string
+                format: binary
+            text/plain:
+              schema:
+                type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        502:
+          description: Bad Gateway.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        503:
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        504:
+          description: Gateway Timeout.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+components:
+  schemas:
+    employeeRequest:
+      type: object
+      description: Employee Request contains the list of employee information to be added.
+      properties:
+        employees:
+          type: array
+          description: Employee contains the details of an employee.
+          items:
+            $ref: '#/components/schemas/employee'
+    employeeResponse:
+      type: object
+      description: Employee Response is the response after storing the file.
+      properties:
+        fileName:
+          type: string
+          description: File Name is the common name of the file.
+          example: 'employee-records-may-21'
+        fileSize:
+          type: number
+          format: double
+          description: File Size is the size of the file on disk.
+          example: '50'
+        fileType:
+          type: string
+          description: File Type is the type of the file.
+          example: 'CSV'
+        recordsNum:
+          type: number
+          format: int64
+          description: Records Number is the quantity of employee records in the file.
+          example: 255
+    employee:
+      type: object
+      description: Employee base contains the details of the employee.
+      properties:
+        name:
+          type: string
+          description: Name is the full name of the employee.
+          example: Bruce Willis
+        dob: 
+          type: string
+          pattern: '^\d{1,2}-\d{1,2}-\d{4}$'
+          description: DOB is the date of birth of the employee.
+          example: 20-08-2020
+        salary:
+          type: number
+          format: double
+          description: Salary is the annual CTC of the employee in INR.
+          example: 122111241.50
+        age:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: Age is the age of the employee in years.
+          example: 20
+    error:
+      type: object
+      description: Error represents the error response model.
+      properties:
+        code:
+          type: string
+          description: 
+            Error Code represents a alpha-numeric error code received from the
+            error
+        message:
+          type: string
+          description: "Message represents a textual description of a given error code"
+        developerMessage:
+          type: string
+          description: "Developer Message represents technical details about the error message"
+        moreInfo:
+          type: array
+          description: "More details about the error as needed"
+          items:
+            $ref: '#/components/schemas/moreInfo'
+    moreInfo:
+      type: object
+      description: "More details about the error as needed"
+      properties:
+        errorCode:
+          description: "Error code sent by API w.r.t. each validation"
+          type: "string"
+        propertyField:
+          description: "Each exact property field that was validated"
+          type: "string"
+        message:
+          description: "Each error message on the property level validation done by the API"
+          type: "string"
+        errorType:
+          type: "string"
+          description: "Error Type represents a type String, which represent the generated error type"

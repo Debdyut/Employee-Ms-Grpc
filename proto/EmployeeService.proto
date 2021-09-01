@@ -1,0 +1,49 @@
+syntax = "proto3";
+package com.employee.v1;
+option java_package = "com.employee.app.grpc";
+option java_multiple_files = true;
+
+message EmployeeBase {
+	// Name of the employee (e.g., Bruce Willis)
+	string name = 1;
+	// Date of birth of the employee (e.g., 20-08-2021)
+	string dob = 2;
+	// Salary of the employee (e.g., 11214.50)
+	string salary = 3;
+	// Age of the employee (e.g., 25)
+	string age = 4;
+}
+
+message EmployeeRequest {
+	// List of employees
+	repeated EmployeeBase employee = 1;
+	// available file formats
+	enum FileFormat {
+	    CSV = 0;
+	    XML = 1;
+    }
+	// File format
+	FileFormat fileType = 2;
+	// File Name is the common name of the file.
+	string name = 3;
+	
+	message Response {
+		// File Name is the common name of the file.
+		string name = 1;
+		// Records Number is the quantity of employee records in the file.
+		string recordsNum = 2;
+		// File uri.
+		string uri = 3;
+		// File type.
+		string type = 4;
+		// File size.
+		string size = 5;
+	}
+}
+
+service EmployeeService {
+	// Creates a new Employee collection.
+	rpc Create(EmployeeRequest) returns (EmployeeRequest.Response);
+	// Updates an existing Employee collection.
+	rpc Update(EmployeeRequest) returns (EmployeeRequest.Response);
+}
